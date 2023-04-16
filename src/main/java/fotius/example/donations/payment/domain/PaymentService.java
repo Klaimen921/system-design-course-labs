@@ -11,29 +11,32 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class PaymentService {
 
     private final PaymentRepository repository;
+    private final List<PaymentChangeJoiner> joiner;
 
     @Transactional
     public Payment create(
-        BigDecimal amount,
-        Currency currency,
-        PaymentMethod method,
-        Long userId
+            BigDecimal amount,
+            Currency currency,
+            PaymentMethod method,
+            Long userId
     ) {
         final Payment payment = Payment.builder()
-            .amount(amount)
-            .currency(currency)
-            .method(method)
-            .userId(userId)
-            .state(PaymentState.NEW)
-            .createdAt(LocalDateTime.now())
-            .build();
+                .amount(amount)
+                .currency(currency)
+                .method(method)
+                .userId(userId)
+                .state(PaymentState.NEW)
+                .createdAt(LocalDateTime.now())
+                .build();
         repository.insert(payment);
+        joiner.forEach(x -> x.onChanged(payment));
         return payment;
     }
 
@@ -45,6 +48,7 @@ public class PaymentService {
         }
         payment.setState(toState);
         repository.update(payment);
+        joiner.forEach(x -> x.onChanged(payment));
         return payment;
     }
 

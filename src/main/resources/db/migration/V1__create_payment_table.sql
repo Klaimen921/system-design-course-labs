@@ -5,5 +5,4 @@ CREATE TABLE payment (
     currency    VARCHAR(3),
     user_id     INTEGER,
     state       VARCHAR(20),
-    created_at  TIMESTAMP
 );
