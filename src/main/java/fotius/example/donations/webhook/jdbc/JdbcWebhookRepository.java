@@ -90,7 +90,7 @@ public class JdbcWebhookRepository implements WebhookRepository {
     }
 
     @Override
-    public List<Webhook> getWithMethodAndState(PaymentMethod method, PaymentState state) {
+    public List<Webhook> getState(PaymentMethod method, PaymentState state) {
         return jdbcTemplate.query(
                 """
                     SELECT

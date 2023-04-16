@@ -48,7 +48,7 @@ public class WebhookService {
     }
 
     public List<Webhook> getState(PaymentMethod method, PaymentState state) {
-        return repository.getWithMethodAndState(method, state);
+        return repository.getState(method, state);
     }
 
 }
